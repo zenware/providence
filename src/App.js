@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class TableField extends Component {
+export class TableField extends Component {
   handleClick() {
     // TODO(zenware): Figure out how to get this clipboard nonsense working...
     const copystring = this.props.fieldName + " = " + this.props.data
-    let cpe = document.getElementById("copyspace");
-    cpe.value = copystring
-    cpe.select()
-    document.execCommand('copy')
     console.log(copystring)
   }
   render() {
@@ -21,19 +17,25 @@ class TableField extends Component {
   }
 }
 
-class TableRow extends Component {
-  handleClick(e) {
-    e.preventDefault()
+export class TableRow extends Component {
+  handleClick() {
     // TODO(zenware): this should copy as a dictionary...
     let copystring = "record = " + JSON.stringify(this.props.data)
     console.log(copystring)
   }
   render() {
+    if (!this.props.data) {
+      return (
+        <tr className="table-row">
+          <td>No Data</td>
+        </tr>
+      )
+    }
     const fields = Object.getOwnPropertyNames(this.props.data).map((x, idx) => {
       return <TableField key={idx} fieldName={x} data={this.props.data[x]} />
     })
     return (
-      <tr className="table-row" onClick={(e) => this.handleClick(e)}>
+      <tr className="table-row" onClick={() => this.handleClick()}>
         {fields}
       </tr>
     )
