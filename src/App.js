@@ -4,146 +4,40 @@ import logo from './logo.svg';
 import './App.css';
 import { Table, Column, Cell } from 'fixed-data-table';
 
-export class TableField extends Component {
-  handleClick() {
-    // TODO(zenware): Figure out how to get this clipboard nonsense working...
-    const copystring = this.props.fieldName + " = " + this.props.data
-    console.log(copystring)
-  }
-  render() {
-    return (
-      <td className="table-field" onClick={() => this.handleClick()}>
-        {this.props.data}
-      </td>
-    )
-  }
-}
-
-export class TableRow extends Component {
-  handleClick() {
-    // TODO(zenware): this should copy as a dictionary...
-    let copystring = "record = " + JSON.stringify(this.props.data)
-    console.log(copystring)
-  }
-  render() {
-    if (!this.props.data) {
-      return (
-        <tr className="table-row">
-          <td>No Data</td>
-        </tr>
-      )
-    }
-    const fields = Object.getOwnPropertyNames(this.props.data).map((x, idx) => {
-      return <TableField key={idx} fieldName={x} data={this.props.data[x]} />
-    })
-    return (
-      <tr className="table-row" onClick={() => this.handleClick()}>
-        {fields}
-      </tr>
-    )
-  }
-}
-/*
-class Table extends Component {
-  constructor() {
-    super()
-    this.state = {
-      rows: [
-        {
-          ip: "4.2.2.2",
-          min: "27.739852ms",
-          avg: "41.894612ms",
-          max: "56.049373ms",
-          std: "10.016575ms",
-        }, 
-        {
-          ip: "8.8.8.8",
-          min: "0s",
-          avg: "49.947716ms",
-          max: "99.895432ms",
-          std: "35.318488ms",
-        }, 
-        {
-          ip: "8.8.4.4",
-          min: "27.292806ms",
-          avg: "31.437785ms",
-          max: "44.763166ms",
-          std: "4.410396ms",
-        },
-        {
-          ip: "208.67.222.222",
-          min: "16.96265ms",
-          avg: "20.916955ms",
-          max: "40.815678ms",
-          std: "4.829886ms",
-        },
-      ],
-    }
-  }
-  render() {
-    const rows = this.state.rows.map(row => {
-      return <TableRow key={row.ip} data={row} />
-    })
-    // TODO(zenware): Capitalize table header field names.
-    const fields = Object.getOwnPropertyNames(this.state.rows[0]).map(x => {
-      return <th key={x}>{x}</th>
-    })
-    return (
-      <table className="table table-bordered table-hover table-condensed">
-        <thead><tr>{fields}</tr></thead>
-        <tbody>{rows}</tbody>
-      </table>
-    )
-  }
-}
-*/
-
-// NOTE(zenware): This is just for testing out fixed-data-table instead.
-// I'm pretty sure I'm going to prefer and switch to it though.
-/*
 const rows = [
-  ["4.2.2.2", "27.739852ms", "41.894612ms", "56.049373ms", "10.016575ms"],
-  ["8.8.8.8", "0s", "49.947716ms", "99.895432ms", "35.318488ms"],
-  ["8.8.4.4", "27.292806ms", "31.437785ms", "44.763166ms", "4.410396ms"],
-  ["208.67.222.22", "16.96265ms", "20.916955ms", "40.815678ms", "4.829886ms"],
+  {
+    id: 0,
+    ip: "4.2.2.2",
+    min: "27.739852ms",
+    avg: "41.894612ms",
+    max: "56.049373ms",
+    std: "10.016575ms",
+  }, 
+  {
+    id: 1,
+    ip: "8.8.8.8",
+    min: "0s",
+    avg: "49.947716ms",
+    max: "99.895432ms",
+    std: "35.318488ms",
+  }, 
+  {
+    id: 2,
+    ip: "8.8.4.4",
+    min: "27.292806ms",
+    avg: "31.437785ms",
+    max: "44.763166ms",
+    std: "4.410396ms",
+  },
+  {
+    id: 3,
+    ip: "208.67.222.222",
+    min: "16.96265ms",
+    avg: "20.916955ms",
+    max: "40.815678ms",
+    std: "4.829886ms",
+  },
 ]
-*/
-
-const rows = [
-{
-  id: 0,
-  ip: "4.2.2.2",
-  min: "27.739852ms",
-  avg: "41.894612ms",
-  max: "56.049373ms",
-  std: "10.016575ms",
-}, 
-{
-  id: 1,
-  ip: "8.8.8.8",
-  min: "0s",
-  avg: "49.947716ms",
-  max: "99.895432ms",
-  std: "35.318488ms",
-}, 
-{
-  id: 2,
-  ip: "8.8.4.4",
-  min: "27.292806ms",
-  avg: "31.437785ms",
-  max: "44.763166ms",
-  std: "4.410396ms",
-},
-{
-  id: 3,
-  ip: "208.67.222.222",
-  min: "16.96265ms",
-  avg: "20.916955ms",
-  max: "40.815678ms",
-  std: "4.829886ms",
-},
-]
-
 
 const SortTypes = {
   ASC: 'ASC',
@@ -153,7 +47,6 @@ const SortTypes = {
 const reverseSortDirection = (sortDir) => (
   sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC
 )
-
 
 class SortHeaderCell extends Component {
   handleClick(e){
@@ -310,7 +203,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <textarea id="copyspace"></textarea>
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Public DNS Server Response Times</h2>
