@@ -167,7 +167,7 @@ class SortableDNSTable extends Component {
         rowHeight={50}
         rowsCount={sortedDataList.getSize()}
         headerHeight={50}
-        width={1000}
+        width={850}
         height={500}
         {...this.props}>
         <Column
@@ -194,6 +194,54 @@ class SortableDNSTable extends Component {
           cell={<TextCell data={sortedDataList} />}
           width={150}
         />
+        <Column
+          columnKey="min"
+          header={
+            <SortHeaderCell
+              onSortChange={() => this.handleSortChange()}
+              sortDir={colSortDirs.min}>
+              Min 
+            </SortHeaderCell>
+          }
+          cell={<TextCell data={sortedDataList} />}
+          width={150}
+        />
+        <Column
+          columnKey="avg"
+          header={
+            <SortHeaderCell
+              onSortChange={() => this.handleSortChange()}
+              sortDir={colSortDirs.avg}>
+              Avg 
+            </SortHeaderCell>
+          }
+          cell={<TextCell data={sortedDataList} />}
+          width={150}
+        />
+        <Column
+          columnKey="max"
+          header={
+            <SortHeaderCell
+              onSortChange={() => this.handleSortChange()}
+              sortDir={colSortDirs.max}>
+              Max
+            </SortHeaderCell>
+          }
+          cell={<TextCell data={sortedDataList} />}
+          width={150}
+        />
+        <Column
+          columnKey="std"
+          header={
+            <SortHeaderCell
+              onSortChange={() => this.handleSortChange()}
+              sortDir={colSortDirs.std}>
+              Std 
+            </SortHeaderCell>
+          }
+          cell={<TextCell data={sortedDataList} />}
+          width={150}
+        />
       </Table>
     )
   }
@@ -207,7 +255,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Public DNS Server Response Times</h2>
         </div>
-        <div className="table-container">
+        <div className="container">
           <SortableDNSTable />
         </div>
       </div>
