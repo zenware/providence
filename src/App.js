@@ -4,6 +4,10 @@ import logo from './logo.svg';
 import './App.css';
 import { Table, Column, Cell } from 'fixed-data-table';
 
+//TODO(zenware) Even though I ought to just focus on building the real data
+// endpoint and hooking this up to it, I also am curious to swap this out with
+// the faker library first and actually generate some output which looks like his.
+// It shouldn't be too hard and it should be better for testing anyways.
 const rows = [
   {
     id: 0,
@@ -44,7 +48,7 @@ const SortTypes = {
   DESC: 'DESC',
 }
 
-const reverseSortDirection = (sortDir) => (
+const reverseSortDirection = (sortDir): string => (
   sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC
 )
 
@@ -78,14 +82,38 @@ const TextCell = ({rowIndex, data, columnKey, ...props}) => (
   </Cell>
 )
 
+/*
+class DataList {
+  _data = []
+  _size: number
+  constructor(data: Array) {
+    if (data) {
+      this._data = data
+      this._size = data.length
+    } else {
+      //TODO(zenware) I've gotta figure out if I should crash or what.
+      // I'm not familiar enough with JavaScript
+    }
+  }
+  getSize() {
+    return this._data.length
+  }
+  getObjectAt(index: number) {
+    return this._data[index]
+  }
+}
+*/
+
+type DataList = DataListWrapper | DNSAnalysisDataList
+
 //TODO(zenware) Write some kind of object which has a few of the DLW methods
 // It should have getSize() and it should also initialize the indexMap
-class DataListWrapper {
+class DataListWrapper {//extends DataList {
   _indexMap = []
   _data: DNSAnalysisDataList
-  constructor(indexMap, dataList) {
+  constructor(indexMap, data) {
     this._indexMap = indexMap;
-    this._data = new DNSAnalysisDataList(dataList);
+    this._data = new DNSAnalysisDataList(data);
   }
   getSize() {
     return this._indexMap.length
@@ -99,15 +127,21 @@ class DataListWrapper {
 
 // TODO(zenware) this should just spawn out data like what's in rows
 // except it should be compatible with the DataListWrapper object.
-class DNSAnalysisDataList {
+class DNSAnalysisDataList {//extends DataList {
   // TODO(zenware) Figure out if I can require the constructor values passed.
   _size: number
   _data = []
-  constructor(recordArray) { 
-    this._size = recordArray.length
-    this._data = recordArray
+  constructor(recordArray: Object[]) { 
+    if (recordArray) {
+      this._size = recordArray.length
+      this._data = recordArray
+    }
+    // TODO(zenware)fail the construc
   }
-  getObjectAt(index) {
+  getObjectAt(index: number) {
+    if (index === null) {
+      return undefined;
+    }
     if (index < 0 || index > this._size) {
       return undefined;
     }
@@ -119,12 +153,16 @@ class DNSAnalysisDataList {
 }
 
 class SortableDNSTable extends Component {
+  _dataList: DataList
+  _defaultSortIndexes = []
+  //TODO(zenware) for now I'm going to just get away with using the god object
+  // I plan to expand upon this in the future to include the actual shape.
+  state: Object 
   constructor(props){
     super(props)
 
     this._dataList = new DNSAnalysisDataList(rows);
     
-    this._defaultSortIndexes = []
     let size = this._dataList.getSize()
     for (let i = 0; i < size; i++) {
       this._defaultSortIndexes.push(i)
@@ -138,8 +176,8 @@ class SortableDNSTable extends Component {
   handleSortChange(colKey, sortDir) {
     let sortIndexes = this._defaultSortIndexes.slice()
     sortIndexes.sort((indexA, indexB) => {
-      let valueA
-      let valueB
+      let valueA = this._dataList.getObjectAt(indexA)[colKey]
+      let valueB = this._dataList.getObjectAt(indexB)[colKey]
       let sortVal = 0
       if (valueA > valueB) {
         sortVal = 1
@@ -153,12 +191,14 @@ class SortableDNSTable extends Component {
 
       return sortVal
     })
-    this.setState({
-      sortedDataList: new DataListWrapper(sortIndexes, this._dataList),
-      colSortDirs: {
-        [colKey]: sortDir,
-      },
-    })
+    if (colKey) {
+      this.setState({
+        sortedDataList: new DataListWrapper(sortIndexes, this._dataList),
+        colSortDirs: {
+          [colKey]: sortDir,
+        },
+      })
+    }
   }
   render(){
     let {sortedDataList, colSortDirs} = this.state;
