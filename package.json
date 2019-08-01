@@ -10,7 +10,7 @@
     "bootstrap": "^3.4.1",
     "fixed-data-table": "^0.6.3",
     "react": "^15.4.2",
-    "react-bootstrap": "^0.30.7",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^15.4.2"
   },
   "scripts": {
