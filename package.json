@@ -9,7 +9,7 @@
   "dependencies": {
     "bootstrap": "^4.3.1",
     "fixed-data-table": "^0.6.3",
-    "react": "^15.6.2",
+    "react": "^15.7.0",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^15.4.2"
   },
